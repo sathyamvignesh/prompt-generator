@@ -35,21 +35,6 @@ header{display:flex;align-items:center;justify-content:space-between;padding:.7r
 .header-actions{display:flex;align-items:center;gap:.5rem}
 .hdr-btn{background:none;border:1px solid var(--border);border-radius:var(--radius-sm);padding:.35rem .6rem;cursor:pointer;color:var(--text-dim);font-size:.8rem;display:flex;align-items:center;gap:.3rem;transition:all var(--transition)}
 .hdr-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-bg)}
-.hdr-btn.has-key{border-color:var(--green);color:var(--green)}
-
-.settings-overlay{display:none;position:fixed;inset:0;z-index:200}
-.settings-overlay.open{display:block}
-.settings-panel{position:absolute;top:50px;right:1.5rem;width:360px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;box-shadow:0 8px 30px rgba(0,0,0,.12);z-index:201}
-[data-theme="dark"] .settings-panel{box-shadow:0 8px 30px rgba(0,0,0,.4)}
-.settings-panel h3{font-size:.85rem;font-weight:700;margin-bottom:.75rem}
-.settings-panel label{display:block;font-size:.78rem;font-weight:600;margin-bottom:.3rem;color:var(--text)}
-.settings-panel input{width:100%;padding:.45rem .65rem;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);font-family:var(--mono);font-size:.8rem;outline:none}
-.settings-panel input:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-bg)}
-.key-link{font-size:.75rem;color:var(--accent);text-decoration:none;margin-top:.4rem;display:inline-block}
-.key-link:hover{text-decoration:underline}
-.key-status{font-size:.75rem;margin-top:.5rem;padding:.3rem .5rem;border-radius:var(--radius-sm)}
-.key-status.ok{background:var(--green-bg);color:var(--green)}
-.key-status.missing{background:var(--orange-bg);color:var(--orange)}
 
 .app{display:grid;grid-template-columns:240px 1fr 1fr;gap:1rem;max-width:1500px;margin:0 auto;padding:1rem 1.5rem;height:calc(100vh - 48px)}
 @media(max-width:1100px){.app{grid-template-columns:220px 1fr;height:auto}}
@@ -63,8 +48,8 @@ header{display:flex;align-items:center;justify-content:space-between;padding:.7r
 .cfg-group label{display:block;font-size:.75rem;font-weight:600;margin-bottom:.25rem;color:var(--text-dim)}
 .cfg-group select{width:100%;padding:.4rem .55rem;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);font-size:.82rem;outline:none;font-family:var(--sans)}
 .cfg-group select:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-bg)}
-.cfg-group input[type="text"]{width:100%;padding:.4rem .55rem;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);font-size:.82rem;outline:none;font-family:var(--sans);margin-top:.3rem}
-.cfg-group input[type="text"]:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-bg)}
+.cfg-group input[type=\"text\"]{width:100%;padding:.4rem .55rem;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);font-size:.82rem;outline:none;font-family:var(--sans);margin-top:.3rem}
+.cfg-group input[type=\"text\"]:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-bg)}
 .cfg-divider{border:none;border-top:1px solid var(--border);margin:0}
 .hidden{display:none!important}
 
@@ -87,15 +72,15 @@ header{display:flex;align-items:center;justify-content:space-between;padding:.7r
 .manual-grid{display:grid;grid-template-columns:1fr 1fr;gap:.65rem}
 @media(max-width:600px){.manual-grid{grid-template-columns:1fr}}
 .manual-grid label{font-size:.75rem;font-weight:600;color:var(--text-dim);margin-bottom:.2rem;display:block}
-.manual-grid select,.manual-grid input[type="text"]{width:100%;padding:.4rem .55rem;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);font-size:.82rem;outline:none;font-family:var(--sans)}
-.manual-grid select:focus,.manual-grid input[type="text"]:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-bg)}
+.manual-grid select,.manual-grid input[type=\"text\"]{width:100%;padding:.4rem .55rem;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);font-size:.82rem;outline:none;font-family:var(--sans)}
+.manual-grid select:focus,.manual-grid input[type=\"text\"]:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-bg)}
 .manual-field{display:flex;flex-direction:column}
 .manual-full{grid-column:1/-1}
 
 .product-grid{display:grid;grid-template-columns:1fr 1fr;gap:.65rem}
 @media(max-width:600px){.product-grid{grid-template-columns:1fr}}
 .product-grid label{font-size:.75rem;font-weight:600;color:var(--text-dim);margin-bottom:.2rem;display:block}
-.product-grid select,.product-grid input[type="text"]{width:100%;padding:.4rem .55rem;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);font-size:.82rem;outline:none;font-family:var(--sans)}
+.product-grid select,.product-grid input[type=\"text\"]{width:100%;padding:.4rem .55rem;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);font-size:.82rem;outline:none;font-family:var(--sans)}
 .product-full{grid-column:1/-1}
 
 .btn{padding:.5rem 1rem;border:none;border-radius:var(--radius-sm);font-family:var(--sans);font-size:.82rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:.35rem;transition:all var(--transition);white-space:nowrap}
@@ -123,7 +108,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:.7r
 .var-panel-toggle{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
 .var-panel-toggle h4{font-size:.75rem;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.04em}
 .var-panel-toggle .chevron{font-size:.65rem;color:var(--text-faint);transition:transform .2s}
-.var-panel-toggle[aria-expanded="false"] .chevron{transform:rotate(-90deg)}
+.var-panel-toggle[aria-expanded=\"false\"] .chevron{transform:rotate(-90deg)}
 .var-fields{margin-top:.6rem;display:flex;flex-direction:column;gap:.5rem}
 .var-fields.collapsed{display:none}
 .var-row{display:flex;align-items:center;gap:.5rem}
@@ -136,7 +121,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:.7r
 .saved-toggle h3{font-size:.8rem;font-weight:700;display:flex;align-items:center;gap:.4rem}
 .saved-toggle .badge{background:var(--accent);color:#fff;font-size:.65rem;padding:.05rem .4rem;border-radius:12px;font-weight:700}
 .saved-toggle .chevron{font-size:.65rem;color:var(--text-faint);transition:transform .2s}
-.saved-toggle[aria-expanded="false"] .chevron{transform:rotate(-90deg)}
+.saved-toggle[aria-expanded=\"false\"] .chevron{transform:rotate(-90deg)}
 .saved-list{margin-top:.6rem;display:flex;flex-direction:column;gap:.4rem}
 .saved-list.collapsed{display:none}
 .saved-item{display:flex;align-items:center;gap:.6rem;padding:.55rem .75rem;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);transition:border var(--transition);font-size:.8rem}
@@ -163,227 +148,216 @@ header{display:flex;align-items:center;justify-content:space-between;padding:.7r
 <body>
 
 <header>
-  <div class="logo">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+  <div class=\"logo\">
+    <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 2L2 7l10 5 10-5-10-5z\"/><path d=\"M2 17l10 5 10-5\"/><path d=\"M2 12l10 5 10-5\"/></svg>
     <h1>Prompt Generator</h1>
   </div>
-  <div class="header-actions">
-    <button class="hdr-btn" id="settingsBtn" title="API Key Settings">&#9881; API Key</button>
-    <button class="hdr-btn" id="themeToggle" title="Toggle theme"><span id="themeIcon">&#9790;</span> <span id="themeLabel">Dark</span></button>
+  <div class=\"header-actions\">
+    <button class=\"hdr-btn\" id=\"themeToggle\" title=\"Toggle theme\"><span id=\"themeIcon\">&#9790;</span> <span id=\"themeLabel\">Dark</span></button>
   </div>
 </header>
 
-<div class="settings-overlay" id="settingsOverlay">
-  <div class="settings-panel" id="settingsPanel">
-    <h3>Gemini API Key</h3>
-    <label for="apiKeyInput">API Key</label>
-    <input type="password" id="apiKeyInput" placeholder="Paste your Gemini API key\u2026" autocomplete="off">
-    <a class="key-link" href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Get a free API key from Google AI Studio &rarr;</a>
-    <div class="key-status missing" id="keyStatus">No API key set</div>
-  </div>
-</div>
+<main class=\"app\">
 
-<main class="app">
-
-  <section class="panel sidebar">
-    <div class="panel-head">Config</div>
-    <div class="panel-body">
-      <div class="cfg-group">
-        <label for="targetAI">Target AI</label>
-        <select id="targetAI">
-          <option value="generic">Generic</option>
-          <option value="claude">Claude</option>
-          <option value="chatgpt">ChatGPT</option>
-          <option value="gemini">Gemini</option>
+  <section class=\"panel sidebar\">
+    <div class=\"panel-head\">Config</div>
+    <div class=\"panel-body\">
+      <div class=\"cfg-group\">
+        <label for=\"targetAI\">Target AI</label>
+        <select id=\"targetAI\">
+          <option value=\"generic\">Generic</option>
+          <option value=\"claude\">Claude</option>
+          <option value=\"chatgpt\">ChatGPT</option>
+          <option value=\"gemini\">Gemini</option>
         </select>
       </div>
-      <div class="cfg-group">
-        <label for="category">Category</label>
-        <select id="category">
-          <option value="general">General</option>
-          <option value="coding">Coding</option>
-          <option value="writing">Writing</option>
-          <option value="analysis">Analysis</option>
-          <option value="image">Image Generation</option>
-          <option value="summarization">Summarization</option>
-          <option value="translation">Translation</option>
-          <option value="brainstorming">Brainstorming</option>
-          <option value="product">Product Discovery</option>
+      <div class=\"cfg-group\">
+        <label for=\"category\">Category</label>
+        <select id=\"category\">
+          <option value=\"general\">General</option>
+          <option value=\"coding\">Coding</option>
+          <option value=\"writing\">Writing</option>
+          <option value=\"analysis\">Analysis</option>
+          <option value=\"image\">Image Generation</option>
+          <option value=\"summarization\">Summarization</option>
+          <option value=\"translation\">Translation</option>
+          <option value=\"brainstorming\">Brainstorming</option>
+          <option value=\"product\">Product Discovery</option>
         </select>
       </div>
-      <hr class="cfg-divider">
-      <div class="cfg-group">
-        <label for="roleSelect">Role / Persona</label>
-        <select id="roleSelect">
-          <option value="">\u2014 None \u2014</option>
-          <option value="Senior Software Developer">Senior Software Developer</option>
-          <option value="Creative Writer">Creative Writer</option>
-          <option value="Data Analyst">Data Analyst</option>
-          <option value="UX Designer">UX Designer</option>
-          <option value="Marketing Strategist">Marketing Strategist</option>
-          <option value="Technical Writer">Technical Writer</option>
-          <option value="Product Manager">Product Manager</option>
-          <option value="custom">Custom\u2026</option>
+      <hr class=\"cfg-divider\">
+      <div class=\"cfg-group\">
+        <label for=\"roleSelect\">Role / Persona</label>
+        <select id=\"roleSelect\">
+          <option value=\"\">&mdash; None &mdash;</option>
+          <option value=\"Senior Software Developer\">Senior Software Developer</option>
+          <option value=\"Creative Writer\">Creative Writer</option>
+          <option value=\"Data Analyst\">Data Analyst</option>
+          <option value=\"UX Designer\">UX Designer</option>
+          <option value=\"Marketing Strategist\">Marketing Strategist</option>
+          <option value=\"Technical Writer\">Technical Writer</option>
+          <option value=\"Product Manager\">Product Manager</option>
+          <option value=\"custom\">Custom&hellip;</option>
         </select>
-        <input type="text" id="roleCustom" placeholder="Enter custom role\u2026" class="hidden">
+        <input type=\"text\" id=\"roleCustom\" placeholder=\"Enter custom role&hellip;\" class=\"hidden\">
       </div>
-      <div class="cfg-group">
-        <label for="tone">Tone</label>
-        <select id="tone">
-          <option value="professional">Professional</option>
-          <option value="casual">Casual</option>
-          <option value="technical">Technical</option>
-          <option value="friendly">Friendly</option>
-          <option value="formal">Formal</option>
-        </select>
-      </div>
-      <div class="cfg-group">
-        <label for="audience">Audience</label>
-        <select id="audience">
-          <option value="general">General</option>
-          <option value="beginner">Beginner</option>
-          <option value="intermediate">Intermediate</option>
-          <option value="expert">Expert</option>
+      <div class=\"cfg-group\">
+        <label for=\"tone\">Tone</label>
+        <select id=\"tone\">
+          <option value=\"professional\">Professional</option>
+          <option value=\"casual\">Casual</option>
+          <option value=\"technical\">Technical</option>
+          <option value=\"friendly\">Friendly</option>
+          <option value=\"formal\">Formal</option>
         </select>
       </div>
-      <div class="cfg-group">
-        <label for="outputFormat">Format</label>
-        <select id="outputFormat">
-          <option value="paragraph">Paragraph</option>
-          <option value="bullet list">Bullet List</option>
-          <option value="numbered list">Numbered List</option>
-          <option value="code">Code</option>
-          <option value="table">Table</option>
-          <option value="step-by-step">Step-by-step</option>
+      <div class=\"cfg-group\">
+        <label for=\"audience\">Audience</label>
+        <select id=\"audience\">
+          <option value=\"general\">General</option>
+          <option value=\"beginner\">Beginner</option>
+          <option value=\"intermediate\">Intermediate</option>
+          <option value=\"expert\">Expert</option>
         </select>
       </div>
-      <div class="cfg-group">
-        <label for="length">Length</label>
-        <select id="length">
-          <option value="concise">Concise</option>
-          <option value="medium">Medium</option>
-          <option value="detailed">Detailed</option>
+      <div class=\"cfg-group\">
+        <label for=\"outputFormat\">Format</label>
+        <select id=\"outputFormat\">
+          <option value=\"paragraph\">Paragraph</option>
+          <option value=\"bullet list\">Bullet List</option>
+          <option value=\"numbered list\">Numbered List</option>
+          <option value=\"code\">Code</option>
+          <option value=\"table\">Table</option>
+          <option value=\"step-by-step\">Step-by-step</option>
+        </select>
+      </div>
+      <div class=\"cfg-group\">
+        <label for=\"length\">Length</label>
+        <select id=\"length\">
+          <option value=\"concise\">Concise</option>
+          <option value=\"medium\">Medium</option>
+          <option value=\"detailed\">Detailed</option>
         </select>
       </div>
     </div>
   </section>
 
-  <section class="panel workspace">
-    <div class="tabs">
-      <button class="tab active" data-tab="generate">Generate</button>
-      <button class="tab" data-tab="improve">Improve</button>
-      <button class="tab" data-tab="manual">Manual</button>
+  <section class=\"panel workspace\">
+    <div class=\"tabs\">
+      <button class=\"tab active\" data-tab=\"generate\">Generate</button>
+      <button class=\"tab\" data-tab=\"improve\">Improve</button>
+      <button class=\"tab\" data-tab=\"manual\">Manual</button>
     </div>
 
-    <div class="tab-content active" id="tab-generate">
-      <div class="ws-body">
+    <div class=\"tab-content active\" id=\"tab-generate\">
+      <div class=\"ws-body\">
         <div>
-          <div class="ws-label">Describe your task <span class="ws-hint">\u2014 what do you need the AI to do?</span></div>
+          <div class=\"ws-label\">Describe your task <span class=\"ws-hint\">&mdash; what do you need the AI to do?</span></div>
         </div>
-        <textarea class="large" id="genTaskInput" placeholder="e.g. I need a prompt that helps me analyze customer support tickets to find recurring pain points and suggest product improvements..."></textarea>
+        <textarea class=\"large\" id=\"genTaskInput\" placeholder=\"e.g. I need a prompt that helps me analyze customer support tickets to find recurring pain points and suggest product improvements...\"></textarea>
       </div>
-      <div class="ws-actions">
-        <button class="btn btn-primary" id="genBtn">Generate Prompt</button>
-        <span class="ws-hint" id="genHint"></span>
-      </div>
-    </div>
-
-    <div class="tab-content" id="tab-improve">
-      <div class="ws-body">
-        <div>
-          <div class="ws-label">Existing prompt <span class="ws-hint">\u2014 paste the prompt you want to improve</span></div>
-        </div>
-        <textarea class="medium" id="improveInput" placeholder="Paste your existing prompt here\u2026"></textarea>
-        <div>
-          <div class="ws-label">Feedback <span class="ws-hint">(optional) \u2014 what's wrong with the current output?</span></div>
-        </div>
-        <textarea id="improveFeedback" rows="3" placeholder="e.g. 'Responses are too verbose', 'Needs more structured output', 'Missing edge cases'\u2026"></textarea>
-      </div>
-      <div class="ws-actions">
-        <button class="btn btn-primary" id="improveBtn">Improve Prompt</button>
-        <span class="ws-hint" id="improveHint"></span>
+      <div class=\"ws-actions\">
+        <button class=\"btn btn-primary\" id=\"genBtn\">Generate Prompt</button>
+        <span class=\"ws-hint\" id=\"genHint\"></span>
       </div>
     </div>
 
-    <div class="tab-content" id="tab-manual">
-      <div class="ws-body" id="manualBody">
-        <div id="manualGeneric">
-          <div class="ws-label" style="margin-bottom:.5rem">Raw Notes <span class="ws-hint">\u2014 rough context, the AI will refine this</span></div>
-          <textarea class="medium" id="manualNotes" placeholder="Dump your rough notes, thoughts, bullet points here\u2026"></textarea>
-          <div class="manual-grid" style="margin-top:.65rem">
-            <div class="manual-field">
-              <label for="manualLang">Language</label>
-              <select id="manualLang">
-                <option value="English">English</option><option value="Spanish">Spanish</option><option value="French">French</option><option value="German">German</option><option value="Portuguese">Portuguese</option><option value="Japanese">Japanese</option><option value="Chinese">Chinese</option><option value="Korean">Korean</option>
+    <div class=\"tab-content\" id=\"tab-improve\">
+      <div class=\"ws-body\">
+        <div>
+          <div class=\"ws-label\">Existing prompt <span class=\"ws-hint\">&mdash; paste the prompt you want to improve</span></div>
+        </div>
+        <textarea class=\"medium\" id=\"improveInput\" placeholder=\"Paste your existing prompt here&hellip;\"></textarea>
+        <div>
+          <div class=\"ws-label\">Feedback <span class=\"ws-hint\">(optional) &mdash; what's wrong with the current output?</span></div>
+        </div>
+        <textarea id=\"improveFeedback\" rows=\"3\" placeholder=\"e.g. 'Responses are too verbose', 'Needs more structured output', 'Missing edge cases'&hellip;\"></textarea>
+      </div>
+      <div class=\"ws-actions\">
+        <button class=\"btn btn-primary\" id=\"improveBtn\">Improve Prompt</button>
+        <span class=\"ws-hint\" id=\"improveHint\"></span>
+      </div>
+    </div>
+
+    <div class=\"tab-content\" id=\"tab-manual\">
+      <div class=\"ws-body\" id=\"manualBody\">
+        <div id=\"manualGeneric\">
+          <div class=\"ws-label\" style=\"margin-bottom:.5rem\">Raw Notes <span class=\"ws-hint\">&mdash; rough context, the AI will refine this</span></div>
+          <textarea class=\"medium\" id=\"manualNotes\" placeholder=\"Dump your rough notes, thoughts, bullet points here&hellip;\"></textarea>
+          <div class=\"manual-grid\" style=\"margin-top:.65rem\">
+            <div class=\"manual-field\">
+              <label for=\"manualLang\">Language</label>
+              <select id=\"manualLang\">
+                <option value=\"English\">English</option><option value=\"Spanish\">Spanish</option><option value=\"French\">French</option><option value=\"German\">German</option><option value=\"Portuguese\">Portuguese</option><option value=\"Japanese\">Japanese</option><option value=\"Chinese\">Chinese</option><option value=\"Korean\">Korean</option>
               </select>
             </div>
-            <div class="manual-field hidden" id="manualTransWrap">
-              <label for="manualTargetLang">Target Language</label>
-              <select id="manualTargetLang">
-                <option value="English">English</option><option value="Spanish">Spanish</option><option value="French">French</option><option value="German">German</option><option value="Portuguese">Portuguese</option><option value="Japanese">Japanese</option><option value="Chinese">Chinese</option><option value="Korean">Korean</option>
+            <div class=\"manual-field hidden\" id=\"manualTransWrap\">
+              <label for=\"manualTargetLang\">Target Language</label>
+              <select id=\"manualTargetLang\">
+                <option value=\"English\">English</option><option value=\"Spanish\">Spanish</option><option value=\"French\">French</option><option value=\"German\">German</option><option value=\"Portuguese\">Portuguese</option><option value=\"Japanese\">Japanese</option><option value=\"Chinese\">Chinese</option><option value=\"Korean\">Korean</option>
               </select>
             </div>
-            <div class="manual-field manual-full">
-              <label for="manualConstraints">Additional Instructions</label>
-              <input type="text" id="manualConstraints" placeholder="Extra constraints or special instructions\u2026">
+            <div class=\"manual-field manual-full\">
+              <label for=\"manualConstraints\">Additional Instructions</label>
+              <input type=\"text\" id=\"manualConstraints\" placeholder=\"Extra constraints or special instructions&hellip;\">
             </div>
           </div>
         </div>
 
-        <div id="manualProduct" class="hidden">
-          <div class="product-grid">
-            <div class="manual-field"><label for="productName">Product Name</label><input type="text" id="productName" placeholder="e.g. Payapps"></div>
-            <div class="manual-field"><label for="featureArea">Feature Area</label><input type="text" id="featureArea" placeholder="e.g. Invoicing"></div>
-            <div class="manual-field"><label for="inputSource">Source of Input</label>
-              <select id="inputSource"><option value="Raw Notes">Raw Notes</option><option value="Support Tickets">Support Tickets</option><option value="Slack Thread">Slack Thread</option><option value="Intercom Tag">Intercom Tag</option></select>
+        <div id=\"manualProduct\" class=\"hidden\">
+          <div class=\"product-grid\">
+            <div class=\"manual-field\"><label for=\"productName\">Product Name</label><input type=\"text\" id=\"productName\" placeholder=\"e.g. Payapps\"></div>
+            <div class=\"manual-field\"><label for=\"featureArea\">Feature Area</label><input type=\"text\" id=\"featureArea\" placeholder=\"e.g. Invoicing\"></div>
+            <div class=\"manual-field\"><label for=\"inputSource\">Source of Input</label>
+              <select id=\"inputSource\"><option value=\"Raw Notes\">Raw Notes</option><option value=\"Support Tickets\">Support Tickets</option><option value=\"Slack Thread\">Slack Thread</option><option value=\"Intercom Tag\">Intercom Tag</option></select>
             </div>
-            <div class="manual-field hidden" id="intercomTagName"><label for="tagName">Tag Name</label><input type="text" id="tagName" placeholder="e.g. billing-issues"></div>
-            <div class="manual-field hidden" id="intercomTagId"><label for="tagId">Tag ID</label><input type="text" id="tagId" placeholder="e.g. 12345678"></div>
-            <div class="manual-field product-full"><label for="rawInput">Raw Input</label><textarea class="medium" id="rawInput" placeholder="Paste notes, tickets, quotes, threads\u2026"></textarea></div>
+            <div class=\"manual-field hidden\" id=\"intercomTagName\"><label for=\"tagName\">Tag Name</label><input type=\"text\" id=\"tagName\" placeholder=\"e.g. billing-issues\"></div>
+            <div class=\"manual-field hidden\" id=\"intercomTagId\"><label for=\"tagId\">Tag ID</label><input type=\"text\" id=\"tagId\" placeholder=\"e.g. 12345678\"></div>
+            <div class=\"manual-field product-full\"><label for=\"rawInput\">Raw Input</label><textarea class=\"medium\" id=\"rawInput\" placeholder=\"Paste notes, tickets, quotes, threads&hellip;\"></textarea></div>
           </div>
         </div>
       </div>
-      <div class="ws-actions">
-        <button class="btn btn-secondary" id="manualPreviewBtn">Preview</button>
-        <button class="btn btn-ghost" id="manualResetBtn">Reset</button>
+      <div class=\"ws-actions\">
+        <button class=\"btn btn-secondary\" id=\"manualPreviewBtn\">Preview</button>
+        <button class=\"btn btn-ghost\" id=\"manualResetBtn\">Reset</button>
       </div>
     </div>
   </section>
 
-  <section class="panel output-panel" id="outputSection">
-    <div class="panel-head">Output</div>
-    <div class="output-box" id="outputBox"><span class="placeholder">Your generated prompt will appear here\u2026</span></div>
+  <section class=\"panel output-panel\" id=\"outputSection\">
+    <div class=\"panel-head\">Output</div>
+    <div class=\"output-box\" id=\"outputBox\"><span class=\"placeholder\">Your generated prompt will appear here&hellip;</span></div>
 
-    <div class="var-panel hidden" id="varPanel">
-      <div class="var-panel-toggle" id="varToggle" aria-expanded="true">
+    <div class=\"var-panel hidden\" id=\"varPanel\">
+      <div class=\"var-panel-toggle\" id=\"varToggle\" aria-expanded=\"true\">
         <h4>Test Variables</h4>
-        <span class="chevron">&#9660;</span>
+        <span class=\"chevron\">&#9660;</span>
       </div>
-      <div class="var-fields" id="varFields"></div>
+      <div class=\"var-fields\" id=\"varFields\"></div>
     </div>
 
-    <div class="output-actions">
-      <button class="btn btn-primary btn-sm" id="copyBtn">Copy</button>
-      <button class="btn btn-secondary btn-sm" id="fillCopyBtn" style="display:none">Fill &amp; Copy</button>
-      <button class="btn btn-secondary btn-sm" id="saveBtn">Save</button>
-      <span class="spacer"></span>
-      <span class="undo-link hidden" id="undoLink">Undo</span>
+    <div class=\"output-actions\">
+      <button class=\"btn btn-primary btn-sm\" id=\"copyBtn\">Copy</button>
+      <button class=\"btn btn-secondary btn-sm\" id=\"fillCopyBtn\" style=\"display:none\">Fill &amp; Copy</button>
+      <button class=\"btn btn-secondary btn-sm\" id=\"saveBtn\">Save</button>
+      <span class=\"spacer\"></span>
+      <span class=\"undo-link hidden\" id=\"undoLink\">Undo</span>
     </div>
   </section>
 
-  <div class="saved-bar">
-    <div class="saved-toggle" id="savedToggle" aria-expanded="false">
-      <h3>Saved Prompts <span class="badge" id="savedCount">0</span></h3>
-      <span class="chevron">&#9660;</span>
+  <div class=\"saved-bar\">
+    <div class=\"saved-toggle\" id=\"savedToggle\" aria-expanded=\"false\">
+      <h3>Saved Prompts <span class=\"badge\" id=\"savedCount\">0</span></h3>
+      <span class=\"chevron\">&#9660;</span>
     </div>
-    <div class="saved-list collapsed" id="savedList">
-      <div class="empty-state" id="emptyState">No saved prompts yet.</div>
+    <div class=\"saved-list collapsed\" id=\"savedList\">
+      <div class=\"empty-state\" id=\"emptyState\">No saved prompts yet.</div>
     </div>
   </div>
 
 </main>
 
-<div class="toast" id="toast"></div>
+<div class=\"toast\" id=\"toast\"></div>
 
 <script>
 (function(){
@@ -392,8 +366,6 @@ const $=s=>document.querySelector(s);
 const $$=s=>document.querySelectorAll(s);
 
 const el={
-  settingsBtn:$('#settingsBtn'),settingsOverlay:$('#settingsOverlay'),settingsPanel:$('#settingsPanel'),
-  apiKeyInput:$('#apiKeyInput'),keyStatus:$('#keyStatus'),
   themeToggle:$('#themeToggle'),themeIcon:$('#themeIcon'),themeLabel:$('#themeLabel'),
   targetAI:$('#targetAI'),category:$('#category'),
   roleSelect:$('#roleSelect'),roleCustom:$('#roleCustom'),
@@ -420,21 +392,6 @@ function getTheme(){const s=localStorage.getItem('pg-theme');if(s)return s;retur
 function applyTheme(t){document.documentElement.setAttribute('data-theme',t);el.themeIcon.textContent=t==='dark'?'\u2600':'\u263E';el.themeLabel.textContent=t==='dark'?'Light':'Dark';localStorage.setItem('pg-theme',t)}
 applyTheme(getTheme());
 el.themeToggle.addEventListener('click',()=>{applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark')});
-
-const API_KEY_STORAGE='pg-gemini-key';
-function getApiKey(){return localStorage.getItem(API_KEY_STORAGE)||''}
-function setApiKey(k){localStorage.setItem(API_KEY_STORAGE,k)}
-function syncKeyUI(){
-  const k=getApiKey();
-  el.apiKeyInput.value=k;
-  if(k){el.keyStatus.className='key-status ok';el.keyStatus.textContent='API key saved';el.settingsBtn.classList.add('has-key')}
-  else{el.keyStatus.className='key-status missing';el.keyStatus.textContent='No API key set';el.settingsBtn.classList.remove('has-key')}
-}
-syncKeyUI();
-
-el.settingsBtn.addEventListener('click',()=>{el.settingsOverlay.classList.toggle('open');syncKeyUI()});
-el.settingsOverlay.addEventListener('click',e=>{if(e.target===el.settingsOverlay)el.settingsOverlay.classList.remove('open')});
-el.apiKeyInput.addEventListener('input',()=>{setApiKey(el.apiKeyInput.value.trim());syncKeyUI()});
 
 $$('.tab').forEach(tab=>{
   tab.addEventListener('click',()=>{
@@ -464,17 +421,14 @@ let toastTimer;
 function showToast(m){clearTimeout(toastTimer);el.toast.textContent=m;el.toast.classList.add('show');toastTimer=setTimeout(()=>el.toast.classList.remove('show'),2500)}
 
 async function callGemini(prompt){
-  const key=getApiKey();
-  if(!key)throw new Error('NO_KEY');
-  const resp=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(key)}`,{
+  const resp=await fetch('/.netlify/functions/gemini',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0.7,maxOutputTokens:4096}})
   });
   if(!resp.ok){
-    const err=await resp.json().catch(()=>({}));
     if(resp.status===429)throw new Error('RATE_LIMIT');
-    if(resp.status===400||resp.status===403)throw new Error('BAD_KEY');
+    const err=await resp.json().catch(()=>({}));
     throw new Error(err.error?.message||`API error ${resp.status}`);
   }
   const data=await resp.json();
@@ -497,75 +451,23 @@ function getConfig(){
 
 function buildGenerateMetaPrompt(taskDesc){
   const cfg=getConfig();
-  return `You are an expert prompt engineer. Your job is to create a high-quality, well-structured prompt template based on the user's task description and configuration.
-
-## User's Task Description
-${taskDesc}
-
-## Configuration Context
-- Target AI model: ${cfg.targetAI==='generic'?'Any LLM':cfg.targetAI}
-- Category: ${cfg.category}
-- Role/Persona: ${cfg.role||'Not specified'}
-- Desired tone: ${cfg.tone}
-- Target audience: ${cfg.audience}
-- Output format preference: ${cfg.format}
-- Length preference: ${cfg.length}
-
-## Instructions
-
-1. Create a prompt template that would effectively accomplish the user's described task.
-2. Use {{variable_name}} placeholders (double curly braces) for any dynamic content that should change between uses. For example: {{topic}}, {{company_name}}, {{user_input}}.
-3. Follow prompt engineering best practices:
-   - Start with a clear role/persona assignment
-   - Provide explicit, structured instructions
-   - Include output format specifications
-   - Add constraints and guardrails where appropriate
-${cfg.targetAI==='claude'?'   - Use XML tags (<role>, <context>, <instructions>, <output_format>) to organize sections since the target is Claude\n':''}${cfg.targetAI==='chatgpt'?'   - Include explicit "Do not..." constraints to prevent verbosity since the target is ChatGPT\n':''}${cfg.categoryValue==='product'?'   - Use the problem discovery template structure: Context, Raw Input, Problem Statement, Affected Roles table, Assumptions & Unknowns, Customer Evidence\n':''}4. The prompt should be immediately usable \u2014 not a meta-description of a prompt.
-
-## Output
-Return ONLY the prompt template. Do not include any explanation, commentary, or markdown code fences around it. Just the raw prompt template text.`;
+  return `You are an expert prompt engineer. Your job is to create a high-quality, well-structured prompt template based on the user's task description and configuration.\n\n## User's Task Description\n${taskDesc}\n\n## Configuration Context\n- Target AI model: ${cfg.targetAI==='generic'?'Any LLM':cfg.targetAI}\n- Category: ${cfg.category}\n- Role/Persona: ${cfg.role||'Not specified'}\n- Desired tone: ${cfg.tone}\n- Target audience: ${cfg.audience}\n- Output format preference: ${cfg.format}\n- Length preference: ${cfg.length}\n\n## Instructions\n\n1. Create a prompt template that would effectively accomplish the user's described task.\n2. Use {{variable_name}} placeholders (double curly braces) for any dynamic content that should change between uses. For example: {{topic}}, {{company_name}}, {{user_input}}.\n3. Follow prompt engineering best practices:\n   - Start with a clear role/persona assignment\n   - Provide explicit, structured instructions\n   - Include output format specifications\n   - Add constraints and guardrails where appropriate\n${cfg.targetAI==='claude'?'   - Use XML tags (<role>, <context>, <instructions>, <output_format>) to organize sections since the target is Claude\n':''}${cfg.targetAI==='chatgpt'?'   - Include explicit \"Do not...\" constraints to prevent verbosity since the target is ChatGPT\n':''}${cfg.categoryValue==='product'?'   - Use the problem discovery template structure: Context, Raw Input, Problem Statement, Affected Roles table, Assumptions & Unknowns, Customer Evidence\n':''}4. The prompt should be immediately usable \u2014 not a meta-description of a prompt.\n\n## Output\nReturn ONLY the prompt template. Do not include any explanation, commentary, or markdown code fences around it. Just the raw prompt template text.`;
 }
 
 function buildImproveMetaPrompt(existingPrompt,feedback){
   const cfg=getConfig();
-  return `You are an expert prompt engineer specializing in prompt improvement and optimization.
-
-## Existing Prompt to Improve
-${existingPrompt}
-
-${feedback?`## User Feedback on Current Issues\n${feedback}\n`:''}
-## Configuration Context
-- Target AI model: ${cfg.targetAI==='generic'?'Any LLM':cfg.targetAI}
-- Category: ${cfg.category}
-
-## Instructions
-
-Improve the existing prompt by:
-
-1. Adding clear, step-by-step reasoning instructions (chain-of-thought) where beneficial
-2. Organizing content with clear section headers${cfg.targetAI==='claude'?' and XML tags':''}
-3. Preserving any existing {{variable}} placeholders \u2014 do NOT remove or rename them
-4. Adding explicit output format requirements
-5. Including constraints and guardrails to prevent common failure modes
-6. Making instructions more specific and actionable
-${feedback?'7. Directly addressing the user feedback listed above\n':''}
-The improved prompt should be significantly more structured and effective than the original while maintaining the same core intent.
-
-## Output
-Return ONLY the improved prompt template. Do not include any explanation, commentary, or markdown code fences. Just the raw improved prompt text.`;
+  return `You are an expert prompt engineer specializing in prompt improvement and optimization.\n\n## Existing Prompt to Improve\n${existingPrompt}\n\n${feedback?`## User Feedback on Current Issues\n${feedback}\n`:''}\n## Configuration Context\n- Target AI model: ${cfg.targetAI==='generic'?'Any LLM':cfg.targetAI}\n- Category: ${cfg.category}\n\n## Instructions\n\nImprove the existing prompt by:\n\n1. Adding clear, step-by-step reasoning instructions (chain-of-thought) where beneficial\n2. Organizing content with clear section headers${cfg.targetAI==='claude'?' and XML tags':''}\n3. Preserving any existing {{variable}} placeholders \u2014 do NOT remove or rename them\n4. Adding explicit output format requirements\n5. Including constraints and guardrails to prevent common failure modes\n6. Making instructions more specific and actionable\n${feedback?'7. Directly addressing the user feedback listed above\n':''}\nThe improved prompt should be significantly more structured and effective than the original while maintaining the same core intent.\n\n## Output\nReturn ONLY the improved prompt template. Do not include any explanation, commentary, or markdown code fences. Just the raw improved prompt text.`;
 }
 
 el.genBtn.addEventListener('click',async()=>{
   const task=el.genTaskInput.value.trim();
   if(!task){showToast('Describe your task first');return}
-  if(!getApiKey()){el.settingsOverlay.classList.add('open');showToast('Set your Gemini API key first');return}
   await runAI('generate',buildGenerateMetaPrompt(task),el.genBtn,el.genHint);
 });
 
 el.improveBtn.addEventListener('click',async()=>{
   const prompt=el.improveInput.value.trim();
   if(!prompt){showToast('Paste a prompt to improve first');return}
-  if(!getApiKey()){el.settingsOverlay.classList.add('open');showToast('Set your Gemini API key first');return}
   const feedback=el.improveFeedback.value.trim();
   await runAI('improve',buildImproveMetaPrompt(prompt,feedback),el.improveBtn,el.improveHint);
 });
@@ -574,10 +476,10 @@ async function runAI(mode,metaPrompt,btn,hint){
   if(isLoading)return;
   isLoading=true;
   const origText=btn.textContent;
-  btn.innerHTML='<span class="spinner"></span> Working\u2026';
+  btn.innerHTML='<span class=\"spinner\"></span> Working\u2026';
   btn.disabled=true;
   hint.textContent='';
-  el.outputBox.innerHTML='<span class="placeholder">Generating\u2026</span>';
+  el.outputBox.innerHTML='<span class=\"placeholder\">Generating\u2026</span>';
   el.outputBox.classList.add('skeleton');
 
   try{
@@ -589,11 +491,9 @@ async function runAI(mode,metaPrompt,btn,hint){
     showToast(mode==='generate'?'Prompt generated!':'Prompt improved!');
   }catch(err){
     el.outputBox.classList.remove('skeleton');
-    if(err.message==='NO_KEY'){el.settingsOverlay.classList.add('open');showToast('Set your Gemini API key first')}
-    else if(err.message==='RATE_LIMIT'){showToast('Rate limited \u2014 wait a moment and try again');hint.textContent='Rate limited'}
-    else if(err.message==='BAD_KEY'){showToast('Invalid API key \u2014 check settings');hint.textContent='Bad API key';el.settingsOverlay.classList.add('open')}
+    if(err.message==='RATE_LIMIT'){showToast('Rate limited \u2014 wait a moment and try again');hint.textContent='Rate limited'}
     else{showToast('Error: '+err.message);hint.textContent='Failed'}
-    el.outputBox.innerHTML='<span class="placeholder">Generation failed. Check your API key and try again.</span>';
+    el.outputBox.innerHTML='<span class=\"placeholder\">Generation failed. Please try again.</span>';
   }finally{
     btn.textContent=origText;
     btn.disabled=false;
@@ -677,26 +577,26 @@ el.manualResetBtn.addEventListener('click',()=>{
   showToast('Manual form reset');
 });
 
-function escapeHtml(s){const m={'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};return s.replace(/[&<>"']/g,c=>m[c])}
+function escapeHtml(s){const m={'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',\"'\":'&#39;'};return s.replace(/[&<>\"']/g,c=>m[c])}
 
 function renderOutput(text){
   el.outputBox.classList.remove('skeleton');
-  if(!text){el.outputBox.innerHTML='<span class="placeholder">Your generated prompt will appear here\u2026</span>';hideVarPanel();return}
+  if(!text){el.outputBox.innerHTML='<span class=\"placeholder\">Your generated prompt will appear here\u2026</span>';hideVarPanel();return}
   const escaped=escapeHtml(text);
-  const highlighted=escaped.replace(/\{\{(\w+)\}\}/g,'<span class="var-highlight" title="Variable: $1">{{$1}}</span>');
+  const highlighted=escaped.replace(/\\{\\{(\\w+)\\}\\}/g,'<span class=\"var-highlight\" title=\"Variable: $1\">{{$1}}</span>');
   el.outputBox.innerHTML=highlighted;
   detectVariables(text);
 }
 
 function detectVariables(text){
-  const vars=[...new Set((text.match(/\{\{(\w+)\}\}/g)||[]).map(v=>v.replace(/[{}]/g,'')))];
+  const vars=[...new Set((text.match(/\\{\\{(\\w+)\\}\\}/g)||[]).map(v=>v.replace(/[{}]/g,'')))];
   if(vars.length===0){hideVarPanel();return}
   el.varPanel.classList.remove('hidden');
   el.fillCopyBtn.style.display='inline-flex';
   el.varFields.innerHTML='';
   vars.forEach(v=>{
     const row=document.createElement('div');row.className='var-row';
-    row.innerHTML=`<span class="var-name">{{${escapeHtml(v)}}}</span><input type="text" data-var="${escapeHtml(v)}" placeholder="Enter value\u2026">`;
+    row.innerHTML=`<span class=\"var-name\">{{${escapeHtml(v)}}}</span><input type=\"text\" data-var=\"${escapeHtml(v)}\" placeholder=\"Enter value\u2026\">`;
     el.varFields.appendChild(row);
   });
 }
@@ -744,7 +644,7 @@ function renderSaved(){
   el.emptyState.style.display='none';
   list.forEach((item,idx)=>{
     const d=document.createElement('div');d.className='saved-item';
-    d.innerHTML=`<div class="saved-item-body"><div class="saved-item-name">${escapeHtml(item.name)}</div><div class="saved-item-preview">${escapeHtml(truncate(item.prompt,100))}</div><div class="saved-item-meta">${escapeHtml(item.category||'')}\u00B7${escapeHtml(item.date)}</div></div><div class="saved-item-actions"><button class="icon-btn load-btn" title="Load" data-idx="${idx}">&#8599;</button><button class="icon-btn copy-saved" title="Copy" data-idx="${idx}">&#128203;</button><button class="icon-btn delete" title="Delete" data-idx="${idx}">&times;</button></div>`;
+    d.innerHTML=`<div class=\"saved-item-body\"><div class=\"saved-item-name\">${escapeHtml(item.name)}</div><div class=\"saved-item-preview\">${escapeHtml(truncate(item.prompt,100))}</div><div class=\"saved-item-meta\">${escapeHtml(item.category||'')}\u00B7${escapeHtml(item.date)}</div></div><div class=\"saved-item-actions\"><button class=\"icon-btn load-btn\" title=\"Load\" data-idx=\"${idx}\">&#8599;</button><button class=\"icon-btn copy-saved\" title=\"Copy\" data-idx=\"${idx}\">&#128203;</button><button class=\"icon-btn delete\" title=\"Delete\" data-idx=\"${idx}\">&times;</button></div>`;
     el.savedList.appendChild(d);
   });
 }
