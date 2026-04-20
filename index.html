@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompt Generator</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f4f5f9;--surface:#fff;--surface2:#f8f9fb;--border:#e2e5eb;
+  --text:#1a1a2e;--text-dim:#6b7280;--text-faint:#9ca3af;
+  --accent:#6d5cff;--accent-hover:#5a48e0;--accent-bg:rgba(109,92,255,.07);
+  --green:#22c55e;--green-bg:rgba(34,197,94,.08);
+  --red:#ef4444;--red-bg:rgba(239,68,68,.08);
+  --orange:#f59e0b;--orange-bg:rgba(245,158,11,.08);
+  --radius:10px;--radius-sm:6px;
+  --shadow:0 1px 8px rgba(0,0,0,.05);
+  --mono:'SF Mono','Fira Code','Cascadia Code','Consolas',monospace;
+  --sans:'Inter','SF Pro Display',-apple-system,system-ui,sans-serif;
+  --transition:.18s ease;
+}
+[data-theme="dark"]{
+  --bg:#111827;--surface:#1f2937;--surface2:#1a2332;--border:#374151;
+  --text:#e5e7eb;--text-dim:#9ca3af;--text-faint:#6b7280;
+  --accent:#8b7dff;--accent-hover:#a395ff;--accent-bg:rgba(139,125,255,.1);
+  --shadow:0 1px 8px rgba(0,0,0,.3);
+}
+html{font-size:14px}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;transition:background var(--transition),color var(--transition)}
+
+header{display:flex;align-items:center;justify-content:space-between;padding:.7rem 1.5rem;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.logo{display:flex;align-items:center;gap:.5rem}
+.logo svg{width:22px;height:22px;color:var(--accent)}
+.logo h1{font-size:1.05rem;font-weight:700;letter-spacing:-.02em}
+.header-actions{display:flex;align-items:center;gap:.5rem}
+.hdr-btn{background:none;border:1px solid var(--border);border-radius:var(--radius-sm);padding:.35rem .6rem;cursor:pointer;color:var(--text-dim);font-size:.8rem;display:flex;align-items:center;gap:.3rem;transition:all var(--transition)}
+.hdr-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-bg)}
+.hdr-btn.has-key{border-color:var(--green);color:var(--green)}
+
+.settings-overlay{display:none;position:fixed;inset:0;z-index:200}
+.settings-overlay.open{display:block}
+.settings-panel{position:absolute;top:50px;right:1.5rem;width:360px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;box-shadow:0 8px 30px rgba(0,0,0,.12);z-index:201}
+[data-theme="dark"] .settings-panel{box-shadow:0 8px 30px rgba(0,0,0,.4)}
+.settings-panel h3{font-size:.85rem;font-weight:700;margin-bottom:.75rem}
+.settings-panel label{display:block;font-size:.78rem;font-weight:600;margin-bottom:.3rem;color:var(--text)}
+.settings-panel input{width:100%;padding:.45rem .65rem;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);font-family:var(--mono);font-size:.8rem;outline:none}
+.settings-panel input:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-bg)}
+.key-link{font-size:.75rem;color:var(--accent);text-decoration:none;margin-top:.4rem;display:inline-block}
+.key-link:hover{text-decoration:underline}
+.key-status{font-size:.75rem;margin-top:.5rem;padding:.3rem .5rem;border-radius:var(--radius-sm)}
+.key-status.ok{background:var(--green-bg);color:var(--green)}
+.key-status.missing{background:var(--orange-bg);color:var(--orange)}
+
+.app{display:grid;grid-template-columns:240px 1fr 1fr;gap:1rem;max-width:1500px;margin:0 auto;padding:1rem 1.5rem;height:calc(100vh - 48px)}
+@media(max-width:1100px){.app{grid-template-columns:220px 1fr;height:auto}}
+@media(max-width:768px){.app{grid-template-columns:1fr;height:auto}}
+
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);display:flex;flex-direction:column;overflow:hidden}
+.panel-head{padding:.65rem 1rem;border-bottom:1px solid var(--border);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-dim);flex-shrink:0}
+.panel-body{padding:1rem;overflow-y:auto;flex:1}
+
+.sidebar .panel-body{display:flex;flex-direction:column;gap:.85rem}
+.cfg-group label{display:block;font-size:.75rem;font-weight:600;margin-bottom:.25rem;color:var(--text-dim)}
+.cfg-group select{width:100%;padding:.4rem .55rem;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);font-size:.82rem;outline:none;font-family:var(--sans)}
+.cfg-group select:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-bg)}
+.cfg-group input[type="text"]{width:100%;padding:.4rem .55rem;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);font-size:.82rem;outline:none;font-family:var(--sans);margin-top:.3rem}
+.cfg-group input[type="text"]:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-bg)}
+.cfg-divider{border:none;border-top:1px solid var(--border);margin:0}
+.hidden{display:none!important}
+
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);flex-shrink:0}
+.tab{padding:.6rem 1.1rem;font-size:.8rem;font-weight:600;color:var(--text-dim);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;transition:all var(--transition)}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-content{display:none;flex:1;overflow-y:auto}
+.tab-content.active{display:flex;flex-direction:column}
+
+.ws-body{padding:1rem;flex:1;display:flex;flex-direction:column;gap:.85rem}
+.ws-body textarea{width:100%;border:1px solid var(--border);border-radius:var(--radius-sm);padding:.65rem .8rem;font-family:var(--sans);font-size:.85rem;color:var(--text);background:var(--bg);resize:vertical;outline:none;line-height:1.6;transition:border var(--transition)}
+.ws-body textarea:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-bg)}
+.ws-body textarea.large{min-height:180px;flex:1}
+.ws-body textarea.medium{min-height:100px}
+.ws-label{font-size:.78rem;font-weight:600;color:var(--text-dim)}
+.ws-hint{font-size:.72rem;color:var(--text-faint);font-weight:400}
+.ws-actions{padding:.75rem 1rem;border-top:1px solid var(--border);display:flex;gap:.5rem;flex-shrink:0;align-items:center}
+
+.manual-grid{display:grid;grid-template-columns:1fr 1fr;gap:.65rem}
+@media(max-width:600px){.manual-grid{grid-template-columns:1fr}}
+.manual-grid label{font-size:.75rem;font-weight:600;color:var(--text-dim);margin-bottom:.2rem;display:block}
+.manual-grid select,.manual-grid input[type="text"]{width:100%;padding:.4rem .55rem;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);font-size:.82rem;outline:none;font-family:var(--sans)}
+.manual-grid select:focus,.manual-grid input[type="text"]:focus{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-bg)}
+.manual-field{display:flex;flex-direction:column}
+.manual-full{grid-column:1/-1}
+
+.product-grid{display:grid;grid-template-columns:1fr 1fr;gap:.65rem}
+@media(max-width:600px){.product-grid{grid-template-columns:1fr}}
+.product-grid label{font-size:.75rem;font-weight:600;color:var(--text-dim);margin-bottom:.2rem;display:block}
+.product-grid select,.product-grid input[type="text"]{width:100%;padding:.4rem .55rem;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);font-size:.82rem;outline:none;font-family:var(--sans)}
+.product-full{grid-column:1/-1}
+
+.btn{padding:.5rem 1rem;border:none;border-radius:var(--radius-sm);font-family:var(--sans);font-size:.82rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:.35rem;transition:all var(--transition);white-space:nowrap}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover:not(:disabled){background:var(--accent-hover);transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed}
+.btn-secondary{background:var(--accent-bg);color:var(--accent);border:1px solid var(--border)}
+.btn-secondary:hover{border-color:var(--accent)}
+.btn-ghost{background:none;color:var(--text-dim);padding:.4rem .6rem}
+.btn-ghost:hover{color:var(--accent);background:var(--accent-bg)}
+.btn:active:not(:disabled){transform:scale(.97)}
+.btn .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.output-panel{display:flex;flex-direction:column}
+.output-box{padding:1rem;flex:1;overflow-y:auto;font-family:var(--mono);font-size:.8rem;line-height:1.75;white-space:pre-wrap;word-break:break-word;color:var(--text);background:var(--surface2);min-height:200px}
+.output-box .placeholder{color:var(--text-faint);font-style:italic;font-family:var(--sans);font-size:.85rem}
+.output-box .var-highlight{background:var(--accent-bg);color:var(--accent);padding:.1rem .35rem;border-radius:4px;font-weight:600;cursor:help}
+.output-actions{padding:.6rem 1rem;border-top:1px solid var(--border);display:flex;gap:.5rem;align-items:center;flex-shrink:0;flex-wrap:wrap}
+.output-actions .spacer{flex:1}
+.undo-link{font-size:.75rem;color:var(--accent);cursor:pointer;text-decoration:underline}
+.undo-link:hover{color:var(--accent-hover)}
+
+.var-panel{border-top:1px solid var(--border);padding:.75rem 1rem;flex-shrink:0}
+.var-panel-toggle{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+.var-panel-toggle h4{font-size:.75rem;font-weight:700;color:var(--text-dim);text-transform:uppercase;letter-spacing:.04em}
+.var-panel-toggle .chevron{font-size:.65rem;color:var(--text-faint);transition:transform .2s}
+.var-panel-toggle[aria-expanded="false"] .chevron{transform:rotate(-90deg)}
+.var-fields{margin-top:.6rem;display:flex;flex-direction:column;gap:.5rem}
+.var-fields.collapsed{display:none}
+.var-row{display:flex;align-items:center;gap:.5rem}
+.var-row .var-name{font-size:.75rem;font-weight:600;color:var(--accent);font-family:var(--mono);min-width:120px;flex-shrink:0}
+.var-row input{flex:1;padding:.35rem .5rem;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg);color:var(--text);font-size:.8rem;outline:none;font-family:var(--sans)}
+.var-row input:focus{border-color:var(--accent)}
+
+.saved-bar{grid-column:1/-1;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.75rem 1rem}
+.saved-toggle{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+.saved-toggle h3{font-size:.8rem;font-weight:700;display:flex;align-items:center;gap:.4rem}
+.saved-toggle .badge{background:var(--accent);color:#fff;font-size:.65rem;padding:.05rem .4rem;border-radius:12px;font-weight:700}
+.saved-toggle .chevron{font-size:.65rem;color:var(--text-faint);transition:transform .2s}
+.saved-toggle[aria-expanded="false"] .chevron{transform:rotate(-90deg)}
+.saved-list{margin-top:.6rem;display:flex;flex-direction:column;gap:.4rem}
+.saved-list.collapsed{display:none}
+.saved-item{display:flex;align-items:center;gap:.6rem;padding:.55rem .75rem;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);transition:border var(--transition);font-size:.8rem}
+.saved-item:hover{border-color:var(--accent)}
+.saved-item-body{flex:1;min-width:0}
+.saved-item-name{font-weight:600;font-size:.8rem}
+.saved-item-preview{font-size:.72rem;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:.1rem}
+.saved-item-meta{font-size:.65rem;color:var(--text-faint);margin-top:.1rem}
+.saved-item-actions{display:flex;gap:.25rem}
+.icon-btn{background:none;border:none;cursor:pointer;padding:.25rem;color:var(--text-faint);border-radius:4px;transition:all var(--transition);font-size:.78rem}
+.icon-btn:hover{background:var(--accent-bg);color:var(--accent)}
+.icon-btn.delete:hover{background:var(--red-bg);color:var(--red)}
+.empty-state{text-align:center;padding:1rem;color:var(--text-faint);font-size:.8rem}
+
+.skeleton{position:relative;overflow:hidden;color:transparent!important}
+.skeleton *{color:transparent!important}
+.skeleton::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,var(--accent-bg),transparent);animation:shimmer 1.5s infinite}
+@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+
+.toast{position:fixed;bottom:1.2rem;right:1.2rem;background:var(--accent);color:#fff;padding:.55rem 1rem;border-radius:var(--radius-sm);font-size:.8rem;font-weight:600;opacity:0;transform:translateY(8px);transition:all .25s ease;pointer-events:none;z-index:300}
+.toast.show{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+    <h1>Prompt Generator</h1>
+  </div>
+  <div class="header-actions">
+    <button class="hdr-btn" id="settingsBtn" title="API Key Settings">&#9881; API Key</button>
+    <button class="hdr-btn" id="themeToggle" title="Toggle theme"><span id="themeIcon">&#9790;</span> <span id="themeLabel">Dark</span></button>
+  </div>
+</header>
+
+<div class="settings-overlay" id="settingsOverlay">
+  <div class="settings-panel" id="settingsPanel">
+    <h3>Gemini API Key</h3>
+    <label for="apiKeyInput">API Key</label>
+    <input type="password" id="apiKeyInput" placeholder="Paste your Gemini API key\u2026" autocomplete="off">
+    <a class="key-link" href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Get a free API key from Google AI Studio &rarr;</a>
+    <div class="key-status missing" id="keyStatus">No API key set</div>
+  </div>
+</div>
+
+<main class="app">
+
+  <section class="panel sidebar">
+    <div class="panel-head">Config</div>
+    <div class="panel-body">
+      <div class="cfg-group">
+        <label for="targetAI">Target AI</label>
+        <select id="targetAI">
+          <option value="generic">Generic</option>
+          <option value="claude">Claude</option>
+          <option value="chatgpt">ChatGPT</option>
+          <option value="gemini">Gemini</option>
+        </select>
+      </div>
+      <div class="cfg-group">
+        <label for="category">Category</label>
+        <select id="category">
+          <option value="general">General</option>
+          <option value="coding">Coding</option>
+          <option value="writing">Writing</option>
+          <option value="analysis">Analysis</option>
+          <option value="image">Image Generation</option>
+          <option value="summarization">Summarization</option>
+          <option value="translation">Translation</option>
+          <option value="brainstorming">Brainstorming</option>
+          <option value="product">Product Discovery</option>
+        </select>
+      </div>
+      <hr class="cfg-divider">
+      <div class="cfg-group">
+        <label for="roleSelect">Role / Persona</label>
+        <select id="roleSelect">
+          <option value="">\u2014 None \u2014</option>
+          <option value="Senior Software Developer">Senior Software Developer</option>
+          <option value="Creative Writer">Creative Writer</option>
+          <option value="Data Analyst">Data Analyst</option>
+          <option value="UX Designer">UX Designer</option>
+          <option value="Marketing Strategist">Marketing Strategist</option>
+          <option value="Technical Writer">Technical Writer</option>
+          <option value="Product Manager">Product Manager</option>
+          <option value="custom">Custom\u2026</option>
+        </select>
+        <input type="text" id="roleCustom" placeholder="Enter custom role\u2026" class="hidden">
+      </div>
+      <div class="cfg-group">
+        <label for="tone">Tone</label>
+        <select id="tone">
+          <option value="professional">Professional</option>
+          <option value="casual">Casual</option>
+          <option value="technical">Technical</option>
+          <option value="friendly">Friendly</option>
+          <option value="formal">Formal</option>
+        </select>
+      </div>
+      <div class="cfg-group">
+        <label for="audience">Audience</label>
+        <select id="audience">
+          <option value="general">General</option>
+          <option value="beginner">Beginner</option>
+          <option value="intermediate">Intermediate</option>
+          <option value="expert">Expert</option>
+        </select>
+      </div>
+      <div class="cfg-group">
+        <label for="outputFormat">Format</label>
+        <select id="outputFormat">
+          <option value="paragraph">Paragraph</option>
+          <option value="bullet list">Bullet List</option>
+          <option value="numbered list">Numbered List</option>
+          <option value="code">Code</option>
+          <option value="table">Table</option>
+          <option value="step-by-step">Step-by-step</option>
+        </select>
+      </div>
+      <div class="cfg-group">
+        <label for="length">Length</label>
+        <select id="length">
+          <option value="concise">Concise</option>
+          <option value="medium">Medium</option>
+          <option value="detailed">Detailed</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel workspace">
+    <div class="tabs">
+      <button class="tab active" data-tab="generate">Generate</button>
+      <button class="tab" data-tab="improve">Improve</button>
+      <button class="tab" data-tab="manual">Manual</button>
+    </div>
+
+    <div class="tab-content active" id="tab-generate">
+      <div class="ws-body">
+        <div>
+          <div class="ws-label">Describe your task <span class="ws-hint">\u2014 what do you need the AI to do?</span></div>
+        </div>
+        <textarea class="large" id="genTaskInput" placeholder="e.g. I need a prompt that helps me analyze customer support tickets to find recurring pain points and suggest product improvements..."></textarea>
+      </div>
+      <div class="ws-actions">
+        <button class="btn btn-primary" id="genBtn">Generate Prompt</button>
+        <span class="ws-hint" id="genHint"></span>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tab-improve">
+      <div class="ws-body">
+        <div>
+          <div class="ws-label">Existing prompt <span class="ws-hint">\u2014 paste the prompt you want to improve</span></div>
+        </div>
+        <textarea class="medium" id="improveInput" placeholder="Paste your existing prompt here\u2026"></textarea>
+        <div>
+          <div class="ws-label">Feedback <span class="ws-hint">(optional) \u2014 what's wrong with the current output?</span></div>
+        </div>
+        <textarea id="improveFeedback" rows="3" placeholder="e.g. 'Responses are too verbose', 'Needs more structured output', 'Missing edge cases'\u2026"></textarea>
+      </div>
+      <div class="ws-actions">
+        <button class="btn btn-primary" id="improveBtn">Improve Prompt</button>
+        <span class="ws-hint" id="improveHint"></span>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tab-manual">
+      <div class="ws-body" id="manualBody">
+        <div id="manualGeneric">
+          <div class="ws-label" style="margin-bottom:.5rem">Raw Notes <span class="ws-hint">\u2014 rough context, the AI will refine this</span></div>
+          <textarea class="medium" id="manualNotes" placeholder="Dump your rough notes, thoughts, bullet points here\u2026"></textarea>
+          <div class="manual-grid" style="margin-top:.65rem">
+            <div class="manual-field">
+              <label for="manualLang">Language</label>
+              <select id="manualLang">
+                <option value="English">English</option><option value="Spanish">Spanish</option><option value="French">French</option><option value="German">German</option><option value="Portuguese">Portuguese</option><option value="Japanese">Japanese</option><option value="Chinese">Chinese</option><option value="Korean">Korean</option>
+              </select>
+            </div>
+            <div class="manual-field hidden" id="manualTransWrap">
+              <label for="manualTargetLang">Target Language</label>
+              <select id="manualTargetLang">
+                <option value="English">English</option><option value="Spanish">Spanish</option><option value="French">French</option><option value="German">German</option><option value="Portuguese">Portuguese</option><option value="Japanese">Japanese</option><option value="Chinese">Chinese</option><option value="Korean">Korean</option>
+              </select>
+            </div>
+            <div class="manual-field manual-full">
+              <label for="manualConstraints">Additional Instructions</label>
+              <input type="text" id="manualConstraints" placeholder="Extra constraints or special instructions\u2026">
+            </div>
+          </div>
+        </div>
+
+        <div id="manualProduct" class="hidden">
+          <div class="product-grid">
+            <div class="manual-field"><label for="productName">Product Name</label><input type="text" id="productName" placeholder="e.g. Payapps"></div>
+            <div class="manual-field"><label for="featureArea">Feature Area</label><input type="text" id="featureArea" placeholder="e.g. Invoicing"></div>
+            <div class="manual-field"><label for="inputSource">Source of Input</label>
+              <select id="inputSource"><option value="Raw Notes">Raw Notes</option><option value="Support Tickets">Support Tickets</option><option value="Slack Thread">Slack Thread</option><option value="Intercom Tag">Intercom Tag</option></select>
+            </div>
+            <div class="manual-field hidden" id="intercomTagName"><label for="tagName">Tag Name</label><input type="text" id="tagName" placeholder="e.g. billing-issues"></div>
+            <div class="manual-field hidden" id="intercomTagId"><label for="tagId">Tag ID</label><input type="text" id="tagId" placeholder="e.g. 12345678"></div>
+            <div class="manual-field product-full"><label for="rawInput">Raw Input</label><textarea class="medium" id="rawInput" placeholder="Paste notes, tickets, quotes, threads\u2026"></textarea></div>
+          </div>
+        </div>
+      </div>
+      <div class="ws-actions">
+        <button class="btn btn-secondary" id="manualPreviewBtn">Preview</button>
+        <button class="btn btn-ghost" id="manualResetBtn">Reset</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel output-panel" id="outputSection">
+    <div class="panel-head">Output</div>
+    <div class="output-box" id="outputBox"><span class="placeholder">Your generated prompt will appear here\u2026</span></div>
+
+    <div class="var-panel hidden" id="varPanel">
+      <div class="var-panel-toggle" id="varToggle" aria-expanded="true">
+        <h4>Test Variables</h4>
+        <span class="chevron">&#9660;</span>
+      </div>
+      <div class="var-fields" id="varFields"></div>
+    </div>
+
+    <div class="output-actions">
+      <button class="btn btn-primary btn-sm" id="copyBtn">Copy</button>
+      <button class="btn btn-secondary btn-sm" id="fillCopyBtn" style="display:none">Fill &amp; Copy</button>
+      <button class="btn btn-secondary btn-sm" id="saveBtn">Save</button>
+      <span class="spacer"></span>
+      <span class="undo-link hidden" id="undoLink">Undo</span>
+    </div>
+  </section>
+
+  <div class="saved-bar">
+    <div class="saved-toggle" id="savedToggle" aria-expanded="false">
+      <h3>Saved Prompts <span class="badge" id="savedCount">0</span></h3>
+      <span class="chevron">&#9660;</span>
+    </div>
+    <div class="saved-list collapsed" id="savedList">
+      <div class="empty-state" id="emptyState">No saved prompts yet.</div>
+    </div>
+  </div>
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+'use strict';
+const $=s=>document.querySelector(s);
+const $$=s=>document.querySelectorAll(s);
+
+const el={
+  settingsBtn:$('#settingsBtn'),settingsOverlay:$('#settingsOverlay'),settingsPanel:$('#settingsPanel'),
+  apiKeyInput:$('#apiKeyInput'),keyStatus:$('#keyStatus'),
+  themeToggle:$('#themeToggle'),themeIcon:$('#themeIcon'),themeLabel:$('#themeLabel'),
+  targetAI:$('#targetAI'),category:$('#category'),
+  roleSelect:$('#roleSelect'),roleCustom:$('#roleCustom'),
+  tone:$('#tone'),audience:$('#audience'),outputFormat:$('#outputFormat'),length:$('#length'),
+  genTaskInput:$('#genTaskInput'),genBtn:$('#genBtn'),genHint:$('#genHint'),
+  improveInput:$('#improveInput'),improveFeedback:$('#improveFeedback'),improveBtn:$('#improveBtn'),improveHint:$('#improveHint'),
+  manualGeneric:$('#manualGeneric'),manualProduct:$('#manualProduct'),
+  manualNotes:$('#manualNotes'),manualLang:$('#manualLang'),
+  manualTransWrap:$('#manualTransWrap'),manualTargetLang:$('#manualTargetLang'),
+  manualConstraints:$('#manualConstraints'),
+  manualPreviewBtn:$('#manualPreviewBtn'),manualResetBtn:$('#manualResetBtn'),
+  productName:$('#productName'),featureArea:$('#featureArea'),inputSource:$('#inputSource'),
+  tagName:$('#tagName'),tagId:$('#tagId'),rawInput:$('#rawInput'),
+  intercomTagName:$('#intercomTagName'),intercomTagId:$('#intercomTagId'),
+  outputBox:$('#outputBox'),varPanel:$('#varPanel'),varToggle:$('#varToggle'),varFields:$('#varFields'),
+  copyBtn:$('#copyBtn'),fillCopyBtn:$('#fillCopyBtn'),saveBtn:$('#saveBtn'),undoLink:$('#undoLink'),
+  savedToggle:$('#savedToggle'),savedList:$('#savedList'),savedCount:$('#savedCount'),emptyState:$('#emptyState'),
+  toast:$('#toast'),
+};
+
+let currentOutput='';let previousOutput='';let isLoading=false;
+
+function getTheme(){const s=localStorage.getItem('pg-theme');if(s)return s;return matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'}
+function applyTheme(t){document.documentElement.setAttribute('data-theme',t);el.themeIcon.textContent=t==='dark'?'\u2600':'\u263E';el.themeLabel.textContent=t==='dark'?'Light':'Dark';localStorage.setItem('pg-theme',t)}
+applyTheme(getTheme());
+el.themeToggle.addEventListener('click',()=>{applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark')});
+
+const API_KEY_STORAGE='pg-gemini-key';
+function getApiKey(){return localStorage.getItem(API_KEY_STORAGE)||''}
+function setApiKey(k){localStorage.setItem(API_KEY_STORAGE,k)}
+function syncKeyUI(){
+  const k=getApiKey();
+  el.apiKeyInput.value=k;
+  if(k){el.keyStatus.className='key-status ok';el.keyStatus.textContent='API key saved';el.settingsBtn.classList.add('has-key')}
+  else{el.keyStatus.className='key-status missing';el.keyStatus.textContent='No API key set';el.settingsBtn.classList.remove('has-key')}
+}
+syncKeyUI();
+
+el.settingsBtn.addEventListener('click',()=>{el.settingsOverlay.classList.toggle('open');syncKeyUI()});
+el.settingsOverlay.addEventListener('click',e=>{if(e.target===el.settingsOverlay)el.settingsOverlay.classList.remove('open')});
+el.apiKeyInput.addEventListener('input',()=>{setApiKey(el.apiKeyInput.value.trim());syncKeyUI()});
+
+$$('.tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    $$('.tab').forEach(t=>t.classList.remove('active'));
+    $$('.tab-content').forEach(c=>c.classList.remove('active'));
+    tab.classList.add('active');
+    $(`#tab-${tab.dataset.tab}`).classList.add('active');
+  });
+});
+
+el.roleSelect.addEventListener('change',()=>{el.roleCustom.classList.toggle('hidden',el.roleSelect.value!=='custom')});
+el.category.addEventListener('change',syncManualVisibility);
+el.inputSource.addEventListener('change',syncManualVisibility);
+
+function syncManualVisibility(){
+  const isProd=el.category.value==='product';
+  el.manualGeneric.classList.toggle('hidden',isProd);
+  el.manualProduct.classList.toggle('hidden',!isProd);
+  el.manualTransWrap.classList.toggle('hidden',el.category.value!=='translation');
+  const isIntercom=el.inputSource.value==='Intercom Tag';
+  el.intercomTagName.classList.toggle('hidden',!isIntercom);
+  el.intercomTagId.classList.toggle('hidden',!isIntercom);
+}
+syncManualVisibility();
+
+let toastTimer;
+function showToast(m){clearTimeout(toastTimer);el.toast.textContent=m;el.toast.classList.add('show');toastTimer=setTimeout(()=>el.toast.classList.remove('show'),2500)}
+
+async function callGemini(prompt){
+  const key=getApiKey();
+  if(!key)throw new Error('NO_KEY');
+  const resp=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${encodeURIComponent(key)}`,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({contents:[{parts:[{text:prompt}]}],generationConfig:{temperature:0.7,maxOutputTokens:4096}})
+  });
+  if(!resp.ok){
+    const err=await resp.json().catch(()=>({}));
+    if(resp.status===429)throw new Error('RATE_LIMIT');
+    if(resp.status===400||resp.status===403)throw new Error('BAD_KEY');
+    throw new Error(err.error?.message||`API error ${resp.status}`);
+  }
+  const data=await resp.json();
+  return data.candidates?.[0]?.content?.parts?.[0]?.text||'';
+}
+
+function getConfig(){
+  const role=el.roleSelect.value==='custom'?el.roleCustom.value.trim():el.roleSelect.value;
+  return{
+    targetAI:el.targetAI.value,
+    category:el.category.options[el.category.selectedIndex].text,
+    categoryValue:el.category.value,
+    role:role,
+    tone:el.tone.value,
+    audience:el.audience.value,
+    format:el.outputFormat.value,
+    length:el.length.value,
+  };
+}
+
+function buildGenerateMetaPrompt(taskDesc){
+  const cfg=getConfig();
+  return `You are an expert prompt engineer. Your job is to create a high-quality, well-structured prompt template based on the user's task description and configuration.
+
+## User's Task Description
+${taskDesc}
+
+## Configuration Context
+- Target AI model: ${cfg.targetAI==='generic'?'Any LLM':cfg.targetAI}
+- Category: ${cfg.category}
+- Role/Persona: ${cfg.role||'Not specified'}
+- Desired tone: ${cfg.tone}
+- Target audience: ${cfg.audience}
+- Output format preference: ${cfg.format}
+- Length preference: ${cfg.length}
+
+## Instructions
+
+1. Create a prompt template that would effectively accomplish the user's described task.
+2. Use {{variable_name}} placeholders (double curly braces) for any dynamic content that should change between uses. For example: {{topic}}, {{company_name}}, {{user_input}}.
+3. Follow prompt engineering best practices:
+   - Start with a clear role/persona assignment
+   - Provide explicit, structured instructions
+   - Include output format specifications
+   - Add constraints and guardrails where appropriate
+${cfg.targetAI==='claude'?'   - Use XML tags (<role>, <context>, <instructions>, <output_format>) to organize sections since the target is Claude\n':''}${cfg.targetAI==='chatgpt'?'   - Include explicit "Do not..." constraints to prevent verbosity since the target is ChatGPT\n':''}${cfg.categoryValue==='product'?'   - Use the problem discovery template structure: Context, Raw Input, Problem Statement, Affected Roles table, Assumptions & Unknowns, Customer Evidence\n':''}4. The prompt should be immediately usable \u2014 not a meta-description of a prompt.
+
+## Output
+Return ONLY the prompt template. Do not include any explanation, commentary, or markdown code fences around it. Just the raw prompt template text.`;
+}
+
+function buildImproveMetaPrompt(existingPrompt,feedback){
+  const cfg=getConfig();
+  return `You are an expert prompt engineer specializing in prompt improvement and optimization.
+
+## Existing Prompt to Improve
+${existingPrompt}
+
+${feedback?`## User Feedback on Current Issues\n${feedback}\n`:''}
+## Configuration Context
+- Target AI model: ${cfg.targetAI==='generic'?'Any LLM':cfg.targetAI}
+- Category: ${cfg.category}
+
+## Instructions
+
+Improve the existing prompt by:
+
+1. Adding clear, step-by-step reasoning instructions (chain-of-thought) where beneficial
+2. Organizing content with clear section headers${cfg.targetAI==='claude'?' and XML tags':''}
+3. Preserving any existing {{variable}} placeholders \u2014 do NOT remove or rename them
+4. Adding explicit output format requirements
+5. Including constraints and guardrails to prevent common failure modes
+6. Making instructions more specific and actionable
+${feedback?'7. Directly addressing the user feedback listed above\n':''}
+The improved prompt should be significantly more structured and effective than the original while maintaining the same core intent.
+
+## Output
+Return ONLY the improved prompt template. Do not include any explanation, commentary, or markdown code fences. Just the raw improved prompt text.`;
+}
+
+el.genBtn.addEventListener('click',async()=>{
+  const task=el.genTaskInput.value.trim();
+  if(!task){showToast('Describe your task first');return}
+  if(!getApiKey()){el.settingsOverlay.classList.add('open');showToast('Set your Gemini API key first');return}
+  await runAI('generate',buildGenerateMetaPrompt(task),el.genBtn,el.genHint);
+});
+
+el.improveBtn.addEventListener('click',async()=>{
+  const prompt=el.improveInput.value.trim();
+  if(!prompt){showToast('Paste a prompt to improve first');return}
+  if(!getApiKey()){el.settingsOverlay.classList.add('open');showToast('Set your Gemini API key first');return}
+  const feedback=el.improveFeedback.value.trim();
+  await runAI('improve',buildImproveMetaPrompt(prompt,feedback),el.improveBtn,el.improveHint);
+});
+
+async function runAI(mode,metaPrompt,btn,hint){
+  if(isLoading)return;
+  isLoading=true;
+  const origText=btn.textContent;
+  btn.innerHTML='<span class="spinner"></span> Working\u2026';
+  btn.disabled=true;
+  hint.textContent='';
+  el.outputBox.innerHTML='<span class="placeholder">Generating\u2026</span>';
+  el.outputBox.classList.add('skeleton');
+
+  try{
+    const result=await callGemini(metaPrompt);
+    previousOutput=currentOutput;
+    currentOutput=result;
+    renderOutput(result);
+    el.undoLink.classList.toggle('hidden',!previousOutput);
+    showToast(mode==='generate'?'Prompt generated!':'Prompt improved!');
+  }catch(err){
+    el.outputBox.classList.remove('skeleton');
+    if(err.message==='NO_KEY'){el.settingsOverlay.classList.add('open');showToast('Set your Gemini API key first')}
+    else if(err.message==='RATE_LIMIT'){showToast('Rate limited \u2014 wait a moment and try again');hint.textContent='Rate limited'}
+    else if(err.message==='BAD_KEY'){showToast('Invalid API key \u2014 check settings');hint.textContent='Bad API key';el.settingsOverlay.classList.add('open')}
+    else{showToast('Error: '+err.message);hint.textContent='Failed'}
+    el.outputBox.innerHTML='<span class="placeholder">Generation failed. Check your API key and try again.</span>';
+  }finally{
+    btn.textContent=origText;
+    btn.disabled=false;
+    isLoading=false;
+  }
+}
+
+const categoryInstructions={
+  general:'Provide a clear, well-structured response on the given topic.',
+  coding:'Write production-ready, well-commented code. Follow best practices and include error handling. Explain the approach and add usage examples.',
+  writing:'Craft compelling, original content. Pay attention to narrative flow, word choice, and engagement.',
+  analysis:'Perform a thorough analysis. Present findings with supporting evidence, consider multiple perspectives, and provide actionable insights.',
+  image:'Generate a detailed image description for AI image generation tools. Include subject, composition, lighting, mood, art style, and color palette.',
+  summarization:'Provide a clear, accurate summary capturing key points and essential details. Preserve the original meaning while being concise.',
+  translation:'Translate accurately while preserving meaning, tone, and cultural nuances. Maintain original formatting.',
+  brainstorming:'Generate creative, diverse ideas. Think outside the box, explore unconventional angles, and organize by feasibility or impact.',
+};
+
+function buildManualGenericPrompt(){
+  const cfg=getConfig();
+  const notes=el.manualNotes.value.trim();
+  const lang=el.manualLang.value;
+  const constraints=el.manualConstraints.value.trim();
+  if(!cfg.role&&!notes)return'';
+  const p=[];
+  if(cfg.role)p.push(`You are a ${cfg.role}.`);
+  p.push('');
+  p.push(categoryInstructions[cfg.categoryValue]||categoryInstructions.general);
+  if(cfg.categoryValue==='translation')p.push(`\nTranslate from ${lang} to ${el.manualTargetLang.value}.`);
+  if(notes){p.push('');p.push('## Raw Notes');p.push('The following are rough, unstructured notes. Interpret them, extract the core intent, and use them as the basis for your response. Do not reproduce them verbatim.');p.push('');p.push(notes)}
+  p.push('');p.push('## Parameters');
+  p.push(`Tone: ${cfg.tone}`);p.push(`Audience: ${cfg.audience}`);p.push(`Output format: ${cfg.format}`);p.push(`Length: ${cfg.length}`);
+  if(lang&&cfg.categoryValue!=='translation')p.push(`Respond in: ${lang}`);
+  if(constraints){p.push('');p.push(`Additional instructions: ${constraints}`)}
+  return p.join('\n');
+}
+
+function buildManualProductPrompt(){
+  const product=el.productName.value.trim()||'{{PRODUCT_NAME}}';
+  const feature=el.featureArea.value.trim()||'{{FEATURE_AREA}}';
+  const source=el.inputSource.value;
+  const raw=el.rawInput.value.trim();
+  const tName=el.tagName.value.trim();
+  const tId=el.tagId.value.trim();
+  if(!el.productName.value.trim()&&!el.featureArea.value.trim()&&!raw)return'';
+  const l=[];
+  l.push('You are a senior product manager conducting problem discovery for a SaaS product.');
+  l.push('');l.push('## Context');
+  l.push(`- Product: ${product}`);l.push(`- Feature area: ${feature}`);l.push(`- Source of input: ${source}`);
+  l.push('');l.push('## Raw Input');l.push(raw||'{{RAW_INPUT}}');
+  l.push('');l.push('## Instructions');l.push('');
+  l.push('### Part 1 \u2014 Problem Statement');
+  l.push('Restate the raw input above as a structured problem statement:');
+  l.push('1. In exactly 5 bullets, describe the core problem (separate symptoms from root causes)');
+  l.push('2. For each bullet, note whether it is a symptom or a root cause');
+  l.push('3. Summarise in one paragraph: who is affected, what breaks for them today, and what \u201Cgood\u201D looks like');
+  l.push('');l.push('### Part 2 \u2014 Affected Roles');
+  l.push('Create a table with these columns:');l.push('| Role/Persona | Current Pain | Frequency | Severity (Low/Med/High) |');
+  l.push('');l.push('### Part 3 \u2014 Assumptions & Unknowns');
+  l.push('List all assumptions and unknowns in this problem space.');
+  l.push('For each, mark it as \u201Cvalidate\u201D or \u201Cinvalidate\u201D and suggest how we would confirm it.');
+  if(source==='Intercom Tag'){l.push('');l.push('### Part 4 \u2014 Customer Evidence (Intercom MCP)');l.push(`Search Intercom for conversations tagged \u201C${tName||'{{TAG_NAME}}'}\u201D (tag ID: ${tId||'{{TAG_ID}}'}).`);l.push('Pull a sample of 10 conversations, cluster them by recurring theme,');l.push('and quote 3 short anonymised paraphrases that illustrate the top pain points.')}
+  l.push('');l.push('## Output Format');l.push('Use markdown with clear section headings. Be specific and evidence-based.');l.push('Avoid generic statements \u2014 ground everything in the raw input provided.');
+  return l.join('\n');
+}
+
+el.manualPreviewBtn.addEventListener('click',()=>{
+  const prompt=el.category.value==='product'?buildManualProductPrompt():buildManualGenericPrompt();
+  if(!prompt){showToast('Fill in at least a role or notes');return}
+  previousOutput=currentOutput;
+  currentOutput=prompt;
+  renderOutput(prompt);
+  el.undoLink.classList.toggle('hidden',!previousOutput);
+});
+
+el.manualResetBtn.addEventListener('click',()=>{
+  el.manualNotes.value='';el.manualConstraints.value='';
+  el.productName.value='';el.featureArea.value='';el.rawInput.value='';
+  el.tagName.value='';el.tagId.value='';el.inputSource.value='Raw Notes';
+  syncManualVisibility();
+  showToast('Manual form reset');
+});
+
+function escapeHtml(s){const m={'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'};return s.replace(/[&<>"']/g,c=>m[c])}
+
+function renderOutput(text){
+  el.outputBox.classList.remove('skeleton');
+  if(!text){el.outputBox.innerHTML='<span class="placeholder">Your generated prompt will appear here\u2026</span>';hideVarPanel();return}
+  const escaped=escapeHtml(text);
+  const highlighted=escaped.replace(/\{\{(\w+)\}\}/g,'<span class="var-highlight" title="Variable: $1">{{$1}}</span>');
+  el.outputBox.innerHTML=highlighted;
+  detectVariables(text);
+}
+
+function detectVariables(text){
+  const vars=[...new Set((text.match(/\{\{(\w+)\}\}/g)||[]).map(v=>v.replace(/[{}]/g,'')))];
+  if(vars.length===0){hideVarPanel();return}
+  el.varPanel.classList.remove('hidden');
+  el.fillCopyBtn.style.display='inline-flex';
+  el.varFields.innerHTML='';
+  vars.forEach(v=>{
+    const row=document.createElement('div');row.className='var-row';
+    row.innerHTML=`<span class="var-name">{{${escapeHtml(v)}}}</span><input type="text" data-var="${escapeHtml(v)}" placeholder="Enter value\u2026">`;
+    el.varFields.appendChild(row);
+  });
+}
+
+function hideVarPanel(){el.varPanel.classList.add('hidden');el.fillCopyBtn.style.display='none';el.varFields.innerHTML=''}
+
+el.varToggle.addEventListener('click',()=>{
+  const exp=el.varToggle.getAttribute('aria-expanded')==='true';
+  el.varToggle.setAttribute('aria-expanded',String(!exp));
+  el.varFields.classList.toggle('collapsed',exp);
+});
+
+el.fillCopyBtn.addEventListener('click',()=>{
+  if(!currentOutput)return;
+  let filled=currentOutput;
+  el.varFields.querySelectorAll('input').forEach(inp=>{
+    const v=inp.dataset.var;const val=inp.value.trim();
+    if(val)filled=filled.split(`{{${v}}}`).join(val);
+  });
+  navigator.clipboard.writeText(filled).then(()=>showToast('Filled & copied!'),()=>showToast('Copy failed'));
+});
+
+el.copyBtn.addEventListener('click',()=>{
+  if(!currentOutput){showToast('Nothing to copy');return}
+  navigator.clipboard.writeText(currentOutput).then(()=>showToast('Copied to clipboard!'),()=>showToast('Copy failed'));
+});
+
+el.undoLink.addEventListener('click',()=>{
+  if(!previousOutput)return;
+  currentOutput=previousOutput;previousOutput='';
+  renderOutput(currentOutput);
+  el.undoLink.classList.add('hidden');
+  showToast('Reverted');
+});
+
+const STORAGE_KEY='pg-saved-prompts';
+function loadSaved(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||[]}catch{return[]}}
+function saveSaved(l){localStorage.setItem(STORAGE_KEY,JSON.stringify(l))}
+function truncate(s,n){return s.length>n?s.slice(0,n)+'\u2026':s}
+
+function renderSaved(){
+  const list=loadSaved();el.savedCount.textContent=list.length;
+  el.savedList.querySelectorAll('.saved-item').forEach(e=>e.remove());
+  if(!list.length){el.emptyState.style.display='block';return}
+  el.emptyState.style.display='none';
+  list.forEach((item,idx)=>{
+    const d=document.createElement('div');d.className='saved-item';
+    d.innerHTML=`<div class="saved-item-body"><div class="saved-item-name">${escapeHtml(item.name)}</div><div class="saved-item-preview">${escapeHtml(truncate(item.prompt,100))}</div><div class="saved-item-meta">${escapeHtml(item.category||'')}\u00B7${escapeHtml(item.date)}</div></div><div class="saved-item-actions"><button class="icon-btn load-btn" title="Load" data-idx="${idx}">&#8599;</button><button class="icon-btn copy-saved" title="Copy" data-idx="${idx}">&#128203;</button><button class="icon-btn delete" title="Delete" data-idx="${idx}">&times;</button></div>`;
+    el.savedList.appendChild(d);
+  });
+}
+
+el.saveBtn.addEventListener('click',()=>{
+  if(!currentOutput){showToast('Nothing to save');return}
+  const name=window.prompt('Name this prompt:',el.category.options[el.category.selectedIndex].text);
+  if(!name)return;
+  const list=loadSaved();
+  list.unshift({name:name.trim(),prompt:currentOutput,category:el.category.options[el.category.selectedIndex].text,date:new Date().toLocaleDateString()});
+  saveSaved(list);renderSaved();showToast('Saved!');
+});
+
+el.savedList.addEventListener('click',e=>{
+  const btn=e.target.closest('button');if(!btn)return;
+  const idx=parseInt(btn.dataset.idx,10);const list=loadSaved();
+  if(idx<0||idx>=list.length)return;
+  if(btn.classList.contains('delete')){list.splice(idx,1);saveSaved(list);renderSaved();showToast('Deleted')}
+  else if(btn.classList.contains('copy-saved')){navigator.clipboard.writeText(list[idx].prompt).then(()=>showToast('Copied!'),()=>showToast('Copy failed'))}
+  else if(btn.classList.contains('load-btn')){previousOutput=currentOutput;currentOutput=list[idx].prompt;renderOutput(currentOutput);el.undoLink.classList.toggle('hidden',!previousOutput);showToast('Loaded')}
+});
+
+el.savedToggle.addEventListener('click',()=>{
+  const exp=el.savedToggle.getAttribute('aria-expanded')==='true';
+  el.savedToggle.setAttribute('aria-expanded',String(!exp));
+  el.savedList.classList.toggle('collapsed',exp);
+});
+
+renderSaved();
+
+})();
+</script>
+</body>
+</html>
